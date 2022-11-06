@@ -30,7 +30,11 @@ class TGAlert:
         # Attention! You cannot use the username of user because of a telegram bot api error.
         # alert_chat это id или username чата, куда будут отправляться алерты.
         # Внимание! Нельзя использовать username пользователя из-за ошибки telegram bot api.
-        self.bot_token = bot_token
+        if bot_token:
+            self.bot_token = bot_token
+        else:
+            self.bot_token = None
+            log.warning('bot_token is empty. Messages will not be sent.')
         self.alert_chat = alert_chat
         self.session = None
         self.node_name = (node_name or socket.getaddrinfo(
@@ -52,6 +56,8 @@ class TGAlert:
         return await self.session.close()
 
     async def send_alert(self, error_text: str):
+        if self.bot_token is None:
+            return
         url = f'https://api.telegram.org/bot{self.bot_token}/sendMessage'
         params = {'chat_id': self.alert_chat, 'text': error_text[:4096], 'parse_mode': 'HTML',
                   'disable_notification': 'false'}
