@@ -52,7 +52,6 @@ class TGAlert:
         return await self.session.close()
 
     async def send_alert(self, error_text: str):
-        print(repr(error_text))
         url = f'https://api.telegram.org/bot{self.bot_token}/sendMessage'
         params = {'chat_id': self.alert_chat, 'text': error_text[:4096], 'parse_mode': 'HTML',
                   'disable_notification': 'false'}
