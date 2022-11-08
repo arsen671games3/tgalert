@@ -68,7 +68,7 @@ class TGAlert:
                 raise RuntimeError(await response.text())
 
     @asynccontextmanager
-    async def catch_alert(self, *format_args, **format_kwargs):
+    async def catch_alert(self, *format_args, reraise=True, **format_kwargs):
         try:
             yield
         except Exception as e:
@@ -78,7 +78,8 @@ class TGAlert:
             function_name = inspect.stack()[2].function
 
             await self.send_alert(self.format(function_name, tb, *format_args, **format_kwargs))
-            raise
+            if reraise:
+                raise
 
     @staticmethod
     def _html_escape(text: str) -> str:
