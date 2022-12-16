@@ -73,7 +73,8 @@ class TGAlert:
             yield
         except Exception as e:
             log.error(e, exc_info=True)
-            tb = '<b>'+str(e)+'</b>' + '\n' + self._html_escape(traceback.format_exc())
+            tb = ('<b>' + self._html_escape(str(e)) + '</b>' + '\n' +
+                  self._html_escape(traceback.format_exc()))
 
             function_name = inspect.stack()[2].function
 
