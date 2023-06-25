@@ -62,7 +62,7 @@ class TGAlert:
         params = {'chat_id': self.alert_chat, 'text': error_text[:4096], 'parse_mode': 'HTML',
                   'disable_notification': 'false'}
         async with self.session.post(url, params=params) as response:
-            if response.status == 200:
+            if response.status in (200, 429):
                 return
             else:
                 raise RuntimeError(await response.text())
